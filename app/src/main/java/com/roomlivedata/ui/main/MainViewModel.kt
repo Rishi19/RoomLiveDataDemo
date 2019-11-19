@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull
 
 class MainViewModel(@NotNull aapContext: Application): AndroidViewModel(aapContext) {
 
-    var roomRepository = LocalRepository(aapContext)
+    private var roomRepository = LocalRepository(aapContext)
 
     var usersList: LiveData<List<User>>? = null
     var toastMsg = MutableLiveData<String>()
