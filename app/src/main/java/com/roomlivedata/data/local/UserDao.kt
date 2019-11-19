@@ -11,14 +11,14 @@ interface UserDao {
     val all: LiveData<List<User>>
 
     @Insert
-    suspend fun insertAll(users: User)
+    fun insertAll(users: User)
 
     @Update
-    suspend fun update(user: User)
+    fun update(user: User)
 
     @Delete
-    suspend fun delete(user: User)
+    fun delete(user: User)
 
     @Query("DELETE FROM user")
-    suspend fun deleteAll()
+    fun deleteAll()
 }

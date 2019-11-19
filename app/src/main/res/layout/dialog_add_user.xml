@@ -5,7 +5,9 @@
 
     <data>
 
-        <variable name="model" type="com.roomlivedata.data.model.User"/>
+        <variable
+            name="activityModel"
+            type="com.roomlivedata.ui.main.MainViewModel" />
 
     </data>
 
@@ -53,7 +55,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Name"
-                        android:text="@{model.name}"
+                        android:text="@={activityModel.name}"
                         android:imeOptions="actionNext"/>
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -70,7 +72,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Age"
-                        android:text="@{String.valueOf(model.age)}"
+                        android:text="@={activityModel.age}"
                         android:inputType="number"
                         android:imeOptions="actionNext"/>
 
@@ -88,7 +90,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Salary"
-                        android:text="@{String.valueOf(model.salary)}"
+                        android:text="@={activityModel.salary}"
                         android:imeOptions="actionDone"
                         android:inputType="number"/>
 

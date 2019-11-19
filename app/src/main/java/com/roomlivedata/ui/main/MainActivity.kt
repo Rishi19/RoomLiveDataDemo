@@ -3,6 +3,7 @@ package com.roomlivedata.ui.main
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.WindowManager
 import android.widget.Toast
@@ -16,9 +17,6 @@ import com.roomlivedata.databinding.ActivityMainBinding
 import com.roomlivedata.databinding.DialogAddUserBinding
 import com.roomlivedata.databinding.DialogShowDetailsBinding
 import com.roomlivedata.data.model.User
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 class MainActivity : AppCompatActivity() {
 
@@ -65,44 +63,41 @@ class MainActivity : AppCompatActivity() {
 
                         override fun onEditClick(position: Int) {
                             val user = adapter?.getItem(position)
+                            Log.i("TAG", user.toString())
                             openDialog(false, user!!)
                         }
 
                         override fun onDeleteClick(position: Int) {
                             val user = adapter!!.getItem(position)
-                            Observable.fromCallable { model?.delete(user) }
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe({
-                                    showToast("User deleted successfully")
-                                }, { throwable ->
-                                    showToast("Something went wrong...! ${throwable.message}")
-                                })
+                            model.delete(user)
                         }
                     })
 
-                binding.recyclerList?.adapter = adapter
-//                if (dialog != null)
-//                    if(dialog!!.isShowing)
-//                        dialog!!.dismiss()
+                binding.recyclerList.adapter = adapter
+
+            })
+
+        model.toastMsg.observe(this,
+            Observer { showToast(it) })
+
+        model.flagDialog.observe(this,
+            Observer {
+                if (it)
+                    if (dialog != null)
+                        if(dialog!!.isShowing)
+                            dialog!!.dismiss()
+
             })
     }
 
     private fun setOnClicks() {
 
-        binding.add?.setOnClickListener {
+        binding.add.setOnClickListener {
             openDialog(true, null)
         }
 
         binding.deleteAll.setOnClickListener {
-            Observable.fromCallable { model.deleteAll() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    showToast("Records deleted")
-                },{ throwable ->
-                    showToast("Something went wrong...! ${throwable.message}")
-                })
+            model.deleteAll()
         }
     }
 
@@ -119,60 +114,28 @@ class MainActivity : AppCompatActivity() {
             setCancelable(true)
         }
 
+        dialogBinding.activityModel = model
+
         if (flag) {
             dialogBinding.headerText.text = "Add User"
             dialogBinding.btnAddUpdate.text = "Add"
+            model.run {
+                name.set("")
+                age.set("")
+                salary.set("")
+            }
         } else {
             dialogBinding.headerText.text = "Update User"
             dialogBinding.btnAddUpdate.text = "Update"
-            dialogBinding.model = userUpdate
+            model.run {
+                name.set(userUpdate!!.name)
+                age.set(userUpdate.age.toString())
+                salary.set(userUpdate.salary.toString())
+            }
         }
 
         dialogBinding.btnAddUpdate.setOnClickListener {
-
-            val edtName = dialogBinding.edtName.text.toString()
-            val edtAge = dialogBinding.edtAge.text.toString()
-            val edtSalary = dialogBinding.edtSalary.text.toString()
-
-            when {
-                edtName.isEmpty() -> showToast("Name is blank")
-                edtAge.isEmpty() -> showToast("Age is blank")
-                edtSalary.isEmpty() -> showToast("Salary is blank")
-                else -> {
-                    val user = User().apply {
-                        name = edtName
-                        age = Integer.parseInt(edtAge)
-                        salary = Integer.parseInt(edtSalary)
-                    }
-
-                    if (flag) {
-                        Observable.fromCallable { model.insertUser(user) }
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({
-                                showToast("User added successfully")
-                            },{
-                                if (it.message!!.contains("UNIQUE constraint failed"))
-                                    showToast("Record already found...")
-                                else
-                                    showToast("Something went wrong...! ${it.message}")
-                            })
-                    } else {
-
-                        Observable.fromCallable { model.update(user) }
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({
-                                showToast("User updated successfully")
-                            },{
-                                if (it.message!!.contains("UNIQUE constraint failed"))
-                                    showToast("Record already found...")
-                                else
-                                    showToast("Something went wrong...! ${it.message}")
-                            })
-                    }
-                }
-            }
+            model.addUpdateUser(flag)
         }
 
         dialogBinding.btnCancel.setOnClickListener {
@@ -188,6 +151,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun createAdapter() {
         val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        binding.recyclerList?.layoutManager = layoutManager
+        binding.recyclerList.layoutManager = layoutManager
     }
 }
