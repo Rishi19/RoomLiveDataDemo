@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
                             )
                             val showInfo = Dialog(this@MainActivity).apply {
                                 setContentView(showInfoBinding.root)
-                                window!!.setLayout(400, WindowManager.LayoutParams.WRAP_CONTENT)
+                                window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
                                 setCanceledOnTouchOutside(false)
                             }
                             showInfoBinding.model = user
@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity() {
 
         dialog = Dialog(this).apply {
             setContentView(dialogBinding.root)
-            window!!.setLayout(400, WindowManager.LayoutParams.WRAP_CONTENT)
+            window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
             setCanceledOnTouchOutside(false)
             setCancelable(true)
         }
