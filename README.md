@@ -5,3 +5,4 @@ Implementation of Room Persistence Library with LiveData to use local database.
 	Room Persistence Library
 	LiveData
 	RxJava
+	MVVM Architecture
