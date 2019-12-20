@@ -34,7 +34,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     //Support Design
-    implementation 'com.google.android.material:material:1.2.0-alpha01'
+    implementation 'com.google.android.material:material:1.2.0-alpha02'
 
     // Room components
     implementation "androidx.room:room-runtime:$room_version"

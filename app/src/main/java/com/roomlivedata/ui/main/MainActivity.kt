@@ -20,7 +20,7 @@ import com.roomlivedata.data.model.User
 
 class MainActivity : AppCompatActivity() {
 
-    private var adapter: UserAdapter? = null
+    private lateinit var adapter: UserAdapter
     private lateinit var binding: ActivityMainBinding
     private val model by lazy { ViewModelProviders.of(this).get(MainViewModel::class.java) }
 
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
                 adapter =
                     UserAdapter(this, it, object : AdapterClickListener {
                         override fun onViewClick(position: Int) {
-                            val user = adapter?.getItem(position)
+                            val user = adapter.getItem(position)
                             val showInfoBinding = DataBindingUtil.inflate<DialogShowDetailsBinding>(
                                 LayoutInflater.from(this@MainActivity),
                                 R.layout.dialog_show_details, null, false
@@ -62,13 +62,13 @@ class MainActivity : AppCompatActivity() {
                         }
 
                         override fun onEditClick(position: Int) {
-                            val user = adapter?.getItem(position)
+                            val user = adapter.getItem(position)
                             Log.i("TAG", user.toString())
-                            openDialog(false, user!!)
+                            openDialog(false, user)
                         }
 
                         override fun onDeleteClick(position: Int) {
-                            val user = adapter!!.getItem(position)
+                            val user = adapter.getItem(position)
                             model.delete(user)
                         }
                     })
@@ -127,10 +127,14 @@ class MainActivity : AppCompatActivity() {
         } else {
             dialogBinding.headerText.text = "Update User"
             dialogBinding.btnAddUpdate.text = "Update"
-            model.run {
-                name.set(userUpdate!!.name)
-                age.set(userUpdate.age.toString())
-                salary.set(userUpdate.salary.toString())
+            dialogBinding.edtName.isEnabled = false
+
+            userUpdate!!.let {
+                model.run {
+                    name.set(userUpdate.name)
+                    age.set(userUpdate.age.toString())
+                    salary.set(userUpdate.salary.toString())
+                }
             }
         }
 

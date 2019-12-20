@@ -88,4 +88,9 @@ class MainViewModel(@NotNull aapContext: Application): AndroidViewModel(aapConte
         })
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        roomRepository.disposable.dispose()
+    }
+
 }
