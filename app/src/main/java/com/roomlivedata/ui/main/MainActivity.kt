@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var adapter: UserAdapter
     private lateinit var binding: ActivityMainBinding
+    private var dialog: Dialog? = null
     private val model by lazy { ViewModelProviders.of(this).get(MainViewModel::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity() {
                             )
                             val showInfo = Dialog(this@MainActivity).apply {
                                 setContentView(showInfoBinding.root)
-                                window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+                                window!!.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
                                 setCanceledOnTouchOutside(false)
                             }
                             showInfoBinding.model = user
@@ -82,11 +83,12 @@ class MainActivity : AppCompatActivity() {
 
         model.flagDialog.observe(this,
             Observer {
-                if (it)
-                    if (dialog != null)
-                        if(dialog!!.isShowing)
-                            dialog!!.dismiss()
-
+                if (it) {
+                    dialog!!.let { dialog ->
+                        if (dialog.isShowing)
+                            dialog.cancel()
+                    }
+                }
             })
     }
 
@@ -101,7 +103,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private var dialog: Dialog? = null
     private fun openDialog(flag: Boolean, userUpdate: User?) {
 
         val dialogBinding = DataBindingUtil.inflate<DialogAddUserBinding>(LayoutInflater.from(this),
@@ -109,7 +110,7 @@ class MainActivity : AppCompatActivity() {
 
         dialog = Dialog(this).apply {
             setContentView(dialogBinding.root)
-            window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+            window!!.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
             setCanceledOnTouchOutside(false)
             setCancelable(true)
         }
@@ -143,7 +144,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         dialogBinding.btnCancel.setOnClickListener {
-            dialog?.dismiss()
+            dialog?.cancel()
         }
 
         dialog!!.show()
