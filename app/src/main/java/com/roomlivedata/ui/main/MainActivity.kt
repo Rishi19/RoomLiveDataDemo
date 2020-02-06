@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
                 if (it) {
                     dialog!!.let { dialog ->
                         if (dialog.isShowing)
-                            dialog.cancel()
+                            dialog.dismiss()
                     }
                 }
             })
