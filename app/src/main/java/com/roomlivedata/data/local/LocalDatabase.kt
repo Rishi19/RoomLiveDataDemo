@@ -6,7 +6,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.roomlivedata.data.model.User
 
-
 @Database(entities = [User::class], version = 1, exportSchema = false)
 abstract class LocalDatabase : RoomDatabase() {
 

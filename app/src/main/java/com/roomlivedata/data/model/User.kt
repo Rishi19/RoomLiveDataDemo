@@ -12,10 +12,10 @@ class User {
     var name = ""
 
     @ColumnInfo(name = "age")
-    var age : Int? = null
+    var age: Int? = null
 
     @ColumnInfo(name = "salary")
-    var salary : Int? = null
+    var salary: Int? = null
 
     override fun toString(): String {
         return "User(name='$name', age=$age, salary=$salary)"

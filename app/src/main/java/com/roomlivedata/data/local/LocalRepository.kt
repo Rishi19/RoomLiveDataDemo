@@ -25,7 +25,7 @@ class LocalRepository(context: Context) : RoomManager {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 callback.onSetMessage("User added successfully")
-            },{
+            }, {
                 callback.onSetMessage(it.message!!)
                 Log.e("TAG", "insert ex : ", it)
             })
@@ -33,14 +33,14 @@ class LocalRepository(context: Context) : RoomManager {
 
     override suspend fun update(callback: RoomManager.CallbackManager, user: User) {
 
-        Log.i("TAG" , "User : $user")
+        Log.i("TAG", "User : $user")
 
         disposable = Completable.fromCallable { dao.update(user) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 callback.onSetMessage("User updated successfully")
-            },{
+            }, {
                 callback.onSetMessage(it.message!!)
                 Log.e("TAG", "update ex : ", it)
             })

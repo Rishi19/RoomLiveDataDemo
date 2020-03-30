@@ -9,7 +9,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.roomlivedata.R
@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: UserAdapter
     private lateinit var binding: ActivityMainBinding
     private var dialog: Dialog? = null
-    private val model by lazy { ViewModelProviders.of(this).get(MainViewModel::class.java) }
+    private val model by lazy { ViewModelProvider(this).get(MainViewModel::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,57 +39,57 @@ class MainActivity : AppCompatActivity() {
     private fun observeField() {
 
         model.usersList?.observe(this,
-            Observer {
+                Observer {
 
-                adapter =
-                    UserAdapter(this, it, object : AdapterClickListener {
-                        override fun onViewClick(position: Int) {
-                            val user = adapter.getItem(position)
-                            val showInfoBinding = DataBindingUtil.inflate<DialogShowDetailsBinding>(
-                                LayoutInflater.from(this@MainActivity),
-                                R.layout.dialog_show_details, null, false
-                            )
-                            val showInfo = Dialog(this@MainActivity).apply {
-                                setContentView(showInfoBinding.root)
-                                window!!.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
-                                setCanceledOnTouchOutside(false)
-                            }
-                            showInfoBinding.model = user
+                    adapter =
+                            UserAdapter(this, it, object : AdapterClickListener {
+                                override fun onViewClick(position: Int) {
+                                    val user = adapter.getItem(position)
+                                    val showInfoBinding = DataBindingUtil.inflate<DialogShowDetailsBinding>(
+                                            LayoutInflater.from(this@MainActivity),
+                                            R.layout.dialog_show_details, null, false
+                                    )
+                                    val showInfo = Dialog(this@MainActivity).apply {
+                                        setContentView(showInfoBinding.root)
+                                        window!!.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
+                                        setCanceledOnTouchOutside(false)
+                                    }
+                                    showInfoBinding.model = user
 
-                            showInfoBinding.btnOk.setOnClickListener {
-                                showInfo.dismiss()
-                            }
-                            showInfo.show()
-                        }
+                                    showInfoBinding.btnOk.setOnClickListener {
+                                        showInfo.dismiss()
+                                    }
+                                    showInfo.show()
+                                }
 
-                        override fun onEditClick(position: Int) {
-                            val user = adapter.getItem(position)
-                            Log.i("TAG", user.toString())
-                            openDialog(false, user)
-                        }
+                                override fun onEditClick(position: Int) {
+                                    val user = adapter.getItem(position)
+                                    Log.i("TAG", user.toString())
+                                    openDialog(false, user)
+                                }
 
-                        override fun onDeleteClick(position: Int) {
-                            val user = adapter.getItem(position)
-                            model.delete(user)
-                        }
-                    })
+                                override fun onDeleteClick(position: Int) {
+                                    val user = adapter.getItem(position)
+                                    model.delete(user)
+                                }
+                            })
 
-                binding.recyclerList.adapter = adapter
+                    binding.recyclerList.adapter = adapter
 
-            })
+                })
 
         model.toastMsg.observe(this,
-            Observer { showToast(it) })
+                Observer { showToast(it) })
 
         model.flagDialog.observe(this,
-            Observer {
-                if (it) {
-                    dialog!!.let { dialog ->
-                        if (dialog.isShowing)
-                            dialog.dismiss()
+                Observer {
+                    if (it) {
+                        dialog!!.let { dialog ->
+                            if (dialog.isShowing)
+                                dialog.dismiss()
+                        }
                     }
-                }
-            })
+                })
     }
 
     private fun setOnClicks() {
@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity() {
     private fun openDialog(flag: Boolean, userUpdate: User?) {
 
         val dialogBinding = DataBindingUtil.inflate<DialogAddUserBinding>(LayoutInflater.from(this),
-                                                    R.layout.dialog_add_user,null,false)
+                R.layout.dialog_add_user, null, false)
 
         dialog = Dialog(this).apply {
             setContentView(dialogBinding.root)

@@ -12,7 +12,7 @@ import com.roomlivedata.data.model.User
 import kotlinx.coroutines.launch
 import org.jetbrains.annotations.NotNull
 
-class MainViewModel(@NotNull aapContext: Application): AndroidViewModel(aapContext) {
+class MainViewModel(@NotNull aapContext: Application) : AndroidViewModel(aapContext) {
 
     private var roomRepository = LocalRepository(aapContext)
 
@@ -32,13 +32,13 @@ class MainViewModel(@NotNull aapContext: Application): AndroidViewModel(aapConte
 
     fun addUpdateUser(flag: Boolean) {
 
-        if(name.get()?.length == 0){
+        if (name.get()?.length == 0) {
             toastMsg.value = "First name is blank"
             return
         } else if (age.get()?.length == 0) {
             toastMsg.value = "Age is blank"
             return
-        } else if (salary.get()?.length == 0){
+        } else if (salary.get()?.length == 0) {
             toastMsg.value = "Salary is blank"
             return
         } else {
@@ -49,9 +49,10 @@ class MainViewModel(@NotNull aapContext: Application): AndroidViewModel(aapConte
 
             if (flag) {
                 viewModelScope.launch {
-                    roomRepository.insert(object :RoomManager.CallbackManager{
+                    roomRepository.insert(object : RoomManager.CallbackManager {
                         override fun onSetMessage(msg: String) {
-                            if (msg.contains("UNIQUE constraint failed")) toastMsg.value = "Record already found..."
+                            if (msg.contains("UNIQUE constraint failed")) toastMsg.value =
+                                "Record already found..."
                             else {
                                 toastMsg.value = msg
                                 flagDialog.value = true

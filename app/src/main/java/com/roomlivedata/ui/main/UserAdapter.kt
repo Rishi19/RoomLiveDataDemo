@@ -16,7 +16,8 @@ open class UserAdapter(
     private val listener: AdapterClickListener
 ) : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
-    inner class ViewHolder(var binding: ListRoomUsersBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+    inner class ViewHolder(var binding: ListRoomUsersBinding) :
+        RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         init {
 
@@ -36,7 +37,12 @@ open class UserAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(context)
-        val binding = DataBindingUtil.inflate<ListRoomUsersBinding>(inflater, R.layout.list_room_users, parent, false)
+        val binding = DataBindingUtil.inflate<ListRoomUsersBinding>(
+            inflater,
+            R.layout.list_room_users,
+            parent,
+            false
+        )
         return ViewHolder(binding)
     }
 
